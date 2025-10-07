@@ -11,6 +11,7 @@ import * as challengeUtils from '../lib/challengeUtils'
 import * as utils from '../lib/utils'
 import * as security from '../lib/insecurity'
 import { challenges } from '../data/datacache'
+import * as models from '../models/index'
 
 export function retrieveBasket () {
   return (req: Request, res: Response, next: NextFunction) => {
@@ -32,5 +33,23 @@ export function retrieveBasket () {
       }).catch((error: Error) => {
         next(error)
       })
+  }
+}
+
+// NEW ENDPOINT: Find baskets by owner email
+// VULNERABLE: SQL injection via string concatenation
+export function findBasketByOwner () {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const owner = req.params.owner || ''
+
+    // VULNERABILITY: String concatenation in raw SQL query (classic SQL injection pattern)
+    // No parameterization or input validation
+    models.sequelize.query(
+      "SELECT * FROM Baskets WHERE owner = '" + owner + "'"
+    ).then(([baskets]: any) => {
+      res.json(baskets)
+    }).catch((error: Error) => {
+      next(error)
+    })
   }
 }
