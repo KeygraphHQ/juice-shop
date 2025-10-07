@@ -79,6 +79,7 @@ import dataErasure from './routes/dataErasure'
 import { dataExport } from './routes/dataExport'
 import { retrieveBasket } from './routes/basket'
 import { searchProducts } from './routes/search'
+import { searchOrders } from './routes/orderSearch'
 import { trackOrder } from './routes/trackOrder'
 import { saveLoginIp } from './routes/saveLoginIp'
 import { serveKeyFiles } from './routes/keyServer'
@@ -593,6 +594,7 @@ restoreOverwrittenFilesWithOriginals().then(() => {
   app.get('/rest/captcha', captchas())
   app.get('/rest/image-captcha', imageCaptchas())
   app.get('/rest/track-order/:id', trackOrder())
+  app.get('/rest/orders/search', searchOrders())
   app.get('/rest/country-mapping', countryMapping())
   app.get('/rest/saveLoginIp', saveLoginIp())
   app.post('/rest/user/data-export', security.appendUserId(), verifyImageCaptcha())
